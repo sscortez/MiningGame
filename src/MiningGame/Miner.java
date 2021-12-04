@@ -39,7 +39,7 @@ public class Miner implements Runnable {
 
     @Override
     public void run() {
-        while (coins.size() <= 20) {
+        while (coins.size() > 0) {
             System.out.println("Miner has " + coins.size() + " coin(s).");
             int capacity = this.queue.remainingCapacity();
             System.out.println("Remaining available coin slots: " + capacity);
@@ -48,6 +48,7 @@ public class Miner implements Runnable {
                 try {
                     this.queue.put(coins.remove(0));
                     System.out.println("Added coin to room.");
+                    System.out.println("Coins in room: " + this.queue.size());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
