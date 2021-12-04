@@ -61,5 +61,4 @@ public class Gamer implements Runnable {
     public List<Coin> getCoins() {
         return coins;
     }
-
 }
