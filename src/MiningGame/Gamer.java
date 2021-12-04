@@ -25,16 +25,15 @@ public class Gamer implements Runnable {
     @Override
     public void run() {
         while (coins.size() <= 20) {
-            
-            Coin element = null;
-            element = this.queue.peek();
-            System.out.println("Peeked element: " + element);
-            
-            if (!Objects.isNull(element)) {
+            if (!this.queue.isEmpty()) {
                 try {
-                    Coin coin = this.queue.take();
-                    System.out.println("Took a coin from the room.");
-                    this.coins.add(coin);
+                    ArrayList<Coin> drops = new ArrayList<>();
+                    this.queue.drainTo(drops);
+                    System.out.println("Took " + drops.size() + " coin(s) from the room.");
+                    Thread.sleep(1000);
+                    while (drops.size() > 0) {
+                        this.coins.add(drops.remove(0));
+                    }
                     System.out.println("Gamer now has " + this.coins.size() + " coin(s).");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
