@@ -25,15 +25,17 @@ import java.util.concurrent.*;
 
 public class MiningGame {
     public static void main (String [] args) {
+        final int MINERS = 20;
+        
         BlockingQueue<Coin> blockingQueue = new ArrayBlockingQueue<>(40);
     
-        Miner prod = new Miner(blockingQueue);
-        Gamer cons = new Gamer(blockingQueue);
-
-        Thread prodThread = new Thread(prod);
-        Thread consThread = new Thread(cons);
-
-        prodThread.start();
-        consThread.start();
+        for (int index = 1; index < MINERS + 1; index++) {
+            Thread newprodThread = new Thread(new Miner(blockingQueue));
+            newprodThread.start();
+            if (index % 2 == 0) {
+                Thread newconsThread = new Thread(new Gamer(blockingQueue));
+                newconsThread.start();
+            }
+        }
     }
 } 
