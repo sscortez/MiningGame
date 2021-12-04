@@ -15,32 +15,35 @@ public class Gamer implements Runnable {
     private String name;
     private List<Coin> coins;
     private BlockingQueue<Coin> queue;
+    private static int counter = 0;
 
     public Gamer(BlockingQueue<Coin> queue) {
-        this.name = "Gamer";
         this.queue = queue;
         this.coins = new ArrayList<>();
+        this.counter++;
+        this.name = "Gamer" + this.counter;
     }
 
     @Override
     public void run() {
+        int waitTries = 0;
         while (coins.size() <= 20) {
-            if (!this.queue.isEmpty()) {
-                try {
-                    ArrayList<Coin> drops = new ArrayList<>();
-                    this.queue.drainTo(drops);
-                    System.out.println("Took " + drops.size() + " coin(s) from the room.");
-                    Thread.sleep(1000);
-                    while (drops.size() > 0) {
-                        this.coins.add(drops.remove(0));
-                    }
-                    System.out.println("Gamer now has " + this.coins.size() + " coin(s).");
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+            if (!this.queue.isEmpty() && waitTries < 3) {
+                ArrayList<Coin> drops = new ArrayList<>();
+                this.queue.drainTo(drops);
+                System.out.println(this.name + " took " + drops.size() + " coin(s) from the room.");
+                Thread.yield();
+                while (drops.size() > 0) {
+                    this.coins.add(drops.remove(0));
                 }
+                System.out.println(this.name + " now has " + this.coins.size() + " coin(s).");
+            } else if (waitTries >= 3) {
+                System.out.println(this.name + " waited 3 times already. Quiting now...");
+                return;
             } else {
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(7000);
+                    waitTries += 1;
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
