@@ -4,12 +4,11 @@ package MiningGame;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
-import java.util.Objects;
 
 /**
  * Gamer thread
  *
- * @author kzavala
+ * @author Kaitlyn Zavala-Salazar
  */
 public class Gamer implements Runnable {
     private String name;
@@ -30,7 +29,7 @@ public class Gamer implements Runnable {
         while (coins.size() <= 20) {
             if (!this.queue.isEmpty() && waitTries < 3) {
                 ArrayList<Coin> drops = new ArrayList<>();
-                this.queue.drainTo(drops);
+                this.queue.drainTo(drops, 10);
                 System.out.println(this.name + " took " + drops.size() + " coin(s) from the room.");
                 Thread.yield();
                 while (drops.size() > 0) {
