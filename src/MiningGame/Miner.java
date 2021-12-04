@@ -18,46 +18,47 @@ public class Miner implements Runnable {
                     new Coin(),
                     new Coin(),
                     new Coin(),
-                    new Coin(),
-                    new Coin(),
-                    new Coin(),
-                    new Coin(),
-                    new Coin(),
-                    new Coin(),
-                    new Coin(),
-                    new Coin(),
-                    new Coin(),
                     new Coin()
             )
     );
     private BlockingQueue<Coin> queue;
+    private static int counter = 0;
 
     public Miner(BlockingQueue<Coin> queue) {
-        this.name = "Miner";
         this.queue = queue;
+        this.counter++;
+        this.name = "Miner" + this.counter;
     }
 
     @Override
     public void run() {
-        while (coins.size() > 0) {
-            System.out.println("Miner has " + coins.size() + " coin(s).");
-            int capacity = this.queue.remainingCapacity();
-            System.out.println("Remaining available coin slots: " + capacity);
-            
-            if (capacity > 0) {
-                try {
-                    this.queue.put(coins.remove(0));
-                    System.out.println("Added coin to room.");
-                    System.out.println("Coins in room: " + this.queue.size());
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+        int refills = 0;
+        while (true) {
+            if (coins.size() > 0 && refills < 3) {
+                int capacity = this.queue.remainingCapacity();
+
+                if (capacity > 0) {
+                    try {
+                        this.queue.put(coins.remove(0));
+                        System.out.println(this.name + " added coin to room.");
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Thread.yield();
                 }
-            } else {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            } else if (refills >= 3) {
+                System.out.println(this.name + " refilled 3 times already. Done working now...");
+                return;
+            } else if (coins.size() == 0) {
+                this.coins.add(new Coin());
+                this.coins.add(new Coin());
+                this.coins.add(new Coin());
+                this.coins.add(new Coin());
+                this.coins.add(new Coin());
+                refills+=1;
+                System.out.println(this.name + " refilled.");
+                Thread.yield();
             }
         }
     }
