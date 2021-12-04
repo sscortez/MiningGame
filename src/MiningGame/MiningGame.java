@@ -7,11 +7,9 @@ package MiningGame;
 
 /**
  *
- * @author sscortez16
+ * @author Samuel Cortez
  */
 
-import java.util.*;
-import java.io.*;
 import java.util.concurrent.*;
 
 // We would like to synchronize producer and consumer so that
