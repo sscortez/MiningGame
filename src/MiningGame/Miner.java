@@ -3,12 +3,11 @@ package MiningGame;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 
 /**
  *
- * @author sscortez16
+ * @author Jesus Guzman
  */
 public class Miner implements Runnable {
     private String name;
